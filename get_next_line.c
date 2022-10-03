@@ -6,7 +6,7 @@
 /*   By: sersanch <sersanch@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 10:00:26 by sersanch          #+#    #+#             */
-/*   Updated: 2022/10/03 10:35:12 by sersanch         ###   ########.fr       */
+/*   Updated: 2022/10/03 14:14:56 by sersanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,43 @@
 #include <unistd.h>
 
 /*
- * Cut a line from 0 to index. Frees the entire line
+ * Cut a line from start to end. Frees the entire line
  * and returns the new line.
  */
-static void	*ft_cut_line(char *line, int index)
+static void	*ft_cut_line(char *line, int start, int end)
 {
-	int		i;
 	char	*new_line;
 
-	new_line = malloc(sizeof(char) * (index + 1));
+	new_line = malloc(sizeof(char) * (end - start + 1));
 	if (!new_line)
 		return (NULL);
-	i = 0;
-	while (i <= index)
+	while (start <= end)
 	{
-		new_line[i] = line[i];
-		i++;
+		new_line[start] = line[start];
+		start++;
 	}
-	new_line[i] = '\0';
+	new_line[start] = '\0';
 	free(line);
 	return (new_line);
+}
+
+static void	ft_find_line(t_line_info tli, int fd)
+{
+	int	aux;
+
+	while (tli->*line[fd])
+	{
+		tli->index[fd] = ft_find_nl(tli);
+		if (tli->index[fd] > 0)
+			return (ft_cut_line(tli->*line[fd], tli->index[fd]));
+		else
+		{
+			aux = read(fd, tli->*line[fd], BUFFER_SIZE); 
+			if (aux == 0)
+				break ;
+		}
+	}
+	return (NULL);
 }
 
 /*
@@ -42,30 +59,24 @@ static void	*ft_cut_line(char *line, int index)
  * */
 char	*get_next_line(int fd)
 {
-	static t_line_info	*lf;
+	static t_line_info	*tli;
 	int BUFFER_SIZE = 42;//BORRAR
 	
 	if (fd < 0 || fd >= 256)//controlar memoria line[]?
 		return (NULL);
-	if (!lf->line[fd])
+	if (!tli->*line[fd])//si no hay nada asignado
 	{
-		lf->line[fd] = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-		if (!line[fd])
+		tli->*line[fd] = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+		if (!tli->*line[fd])
 			return (NULL);
-	}
-	if (read(fd, line[fd], BUFFER_SIZE) > 0)
-	{//hay texto
-		index = ft_find_char((char *)line[fd], '\n');
-		if (index > 0) //encuentra \n o EOF
+		if (read(fd, tli->*line[fd], BUFFER_SIZE) == 0)
 		{
-			return (ft_cut_line((char *)line[fd], index));
-		}
-		else //else no hace falta
-		{//No ha encontrado \n ni EOF. aumenta la linea
-			//ft_reset_	
+			free(tli->*line[fd]);
+			return (NULL);
 		}
 	}
-	free(line[fd]);
-//	free(line);
-	return (NULL);
+	str = ft_find_line(tli, fd);
+	if (!str)
+		free(tli->line[fd]);
+	return (str);
 }
