@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sersanch <sersanch@student.42barcel>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/04 11:57:54 by sersanch          #+#    #+#             */
+/*   Updated: 2022/10/04 12:38:17 by sersanch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 int	ft_strlen(char *str)
@@ -12,6 +24,8 @@ int	ft_strlen(char *str)
 
 int	ft_find_nl(char *str)
 {
+	int	i;
+
 	if (!str)
 		return (-2);
 	i = 0;
@@ -33,7 +47,7 @@ char	*ft_substr(char *str, int len)
 	if (!sbstr)
 		return (NULL);
 	i = 0;
-	while (i <= end)
+	while (i < len)
 	{
 		sbstr[i] = str[i];
 		i++;
@@ -51,7 +65,35 @@ void	*ft_calloc(int size, int count)
 	if (!mem)
 		return (0);
 	i = 0;
-	while (i < (size * count))
+	while (i <= (size * count))
 		mem[i++] = '\0';
 	return ((void *)mem);
+}
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	int		lens1;
+	int		lens2;
+	int		i;
+	int		j;
+	char	*new_word;
+
+	lens1 = ft_strlen(s1);
+	lens2 = ft_strlen(s2);
+	new_word = ft_calloc(sizeof(char), (lens1 + lens2 + 1));
+	if (!new_word)
+		return (0);
+	i = -1;
+	while (s1[++i])
+		new_word[i] = s1[i];
+	j = 0;
+	while (s2[j])
+	{
+		new_word[i] = s2[j];
+		i++;
+		j++;
+	}
+	free(s1);
+	free(s2);
+	return (new_word);
 }
