@@ -6,7 +6,7 @@
 /*   By: sersanch <sersanch@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/04 11:57:54 by sersanch          #+#    #+#             */
-/*   Updated: 2022/10/04 12:38:17 by sersanch         ###   ########.fr       */
+/*   Updated: 2022/10/04 15:32:26 by sersanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,11 @@ int	ft_strlen(char *str)
 	int	i;
 
 	i = 0;
-	while (!str[i])
+	while (str[i] != '\0')
+	{
+		printf("str[%d] = >%c<\n", i, str[i]);
 		i++;
+	}
 	return (i);
 }
 
@@ -65,7 +68,7 @@ void	*ft_calloc(int size, int count)
 	if (!mem)
 		return (0);
 	i = 0;
-	while (i <= (size * count))
+	while (i < (size * count))
 		mem[i++] = '\0';
 	return ((void *)mem);
 }
@@ -95,5 +98,6 @@ char	*ft_strjoin(char *s1, char *s2)
 	}
 	free(s1);
 	free(s2);
+	//printf("llega");
 	return (new_word);
 }

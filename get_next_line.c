@@ -6,7 +6,7 @@
 /*   By: sersanch <sersanch@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 16:17:26 by sersanch          #+#    #+#             */
-/*   Updated: 2022/10/04 12:39:47 by sersanch         ###   ########.fr       */
+/*   Updated: 2022/10/04 15:28:22 by sersanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,31 @@ static char	*ft_cut_line(char * line, int index)//devuelve linea
 	char	*found_line;
 	int		i;
 //caracter en index se incluye en new_str
+	printf("entra cut\n");
+	printf("index >%d< len>%d<\n", index,  ft_strlen(line) - index + 1);
 	new_str = ft_calloc(sizeof(char), (ft_strlen(line) - index + 1));
 	found_line = ft_calloc(sizeof(char), (index + 1));
 	if (!new_str || !found_line)
+	{
+		printf("error\n");
 		return (NULL);
+	}
 	i = 0;
+	printf("index>%d<\n", index);
 	while (i < index)
 	{
 		found_line[i] = line[i];
+		printf("char found line>%c<\n", found_line[i]);
 		i++;
 	}
+	printf("palabra encontrada >%s<\n", found_line);
 	i = 0;
+	index++;
+	//printf("lineIndexI >%s<>%c<\n", line, line[index + i]);
 	while (line[index + i])
 	{
 		new_str[i] = line[index + i];
+		printf("char new str>%c<\n", new_str[i]);
 		i++;
 	}
 	//new_str[i] = '\0';
@@ -77,21 +88,27 @@ static char	*ft_find_line(int fd, char *saved)
 	int		i;
 	
 	i = ft_find_nl(saved);
+	printf("entra findline i>%d<\n", i);
 	if (i >= 0)
+	{
+		printf("cut\n");
 		return (ft_cut_line(saved, i));
+	}
 	else
 	{
 		aux = ft_calloc(sizeof(char), BUFFER_SIZE + 1);
 		if (!aux)
 			return (NULL);
 		i = read(fd, aux, BUFFER_SIZE);
-		if (i == 0)//si no hay mas que leer devuelve lo que hay
+		printf("i\t>%d<\n", i);
+		if (i <= 0)//si no hay mas que leer devuelve lo que hay
 			return (saved);
-		printf(">%s<\n", saved);
-		printf(">%s\n<", aux);
+		printf("saved\t>%s<\n", saved);
+		//printf("aux\t>%s<\n", aux);
 		joined_str = ft_strjoin(saved, aux);
-		//saved = joined_str;//strcpy???
-		//ft_find_line(fd, saved);
+		saved = joined_str;//strcpy???
+		printf("saved2>%s<\n", saved);
+		return (ft_find_line(fd, saved));
 	}
 	return (NULL);
 }
