@@ -29,7 +29,7 @@ char	*ft_substr(char *str, int len)
 	int	i;
 	char	*sbstr;
 	
-	sbstr = malloc(sizeof(char) * (len + 1));
+	sbstr = ft_calloc(sizeof(char), (len + 1));
 	if (!sbstr)
 		return (NULL);
 	i = 0;
@@ -38,6 +38,20 @@ char	*ft_substr(char *str, int len)
 		sbstr[i] = str[i];
 		i++;
 	}
-	sbstr[i] = '\0';
+	//sbstr[i] = '\0';
 	return (sbstr);
+}
+
+void	*ft_calloc(int size, int count)
+{
+	char	*mem;
+	int		i;
+
+	mem = malloc(size * count);
+	if (!mem)
+		return (0);
+	i = 0;
+	while (i < (size * count))
+		mem[i++] = '\0';
+	return ((void *)mem);
 }
