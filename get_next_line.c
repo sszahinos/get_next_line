@@ -6,20 +6,28 @@
 /*   By: sersanch <sersanch@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 16:17:26 by sersanch          #+#    #+#             */
-/*   Updated: 2022/10/04 11:09:37 by sersanch         ###   ########.fr       */
+/*   Updated: 2022/10/04 11:53:54 by sersanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
  * ELIMINAR LINEAS SI ALGUN MALLOC FALLA (REVISAR CADA IF() RETURN NULL)
  * */
-static char	*ft_cut_line(char * line, int index)
+static char	*ft_cut_line(char * line, int index)//devuelve linea
 {
-	char	*new_str;
-	int	i;
+	char	*new_str;//resto
+	char	*found_line;
+	int		i;
 
 	new_str = ft_calloc(sizeof(char), (ft_strlen(line) - index + 1));//caracter en index se incluye en new_str
-	if (!new_str)
+	found_line = ft_calloc(sizeof(char), (index + 1));
+	if (!new_str || !found_line)
 		return (NULL);
+	i = 0;
+	while (i < index)
+	{
+		found_line[i] = line[i];
+		i++;
+	}
 	i = 0;
 	while (line[index + i])
 	{
@@ -28,7 +36,8 @@ static char	*ft_cut_line(char * line, int index)
 	}
 	//new_str[i] = '\0';
 	free(line);
-	return (new_str);
+	line = new_str;
+	return (found_line);
 }
 
 static char	*ft_join_str(char	*first_line, char *last_line)
@@ -58,28 +67,31 @@ static char	*ft_join_str(char	*first_line, char *last_line)
 	return (new_line);
 }
 
-char	*ft_find_line(int fd, char *saved)
+static char	*ft_find_line(int fd, char *saved)
 {
-	char	*str;
+	char	*aux;
+	char	*aux2;
 	char	*joined_str;
 	int		i;
-
+	
 	i = ft_find_nl(saved);
-	str = NULL;
-	if (i < 0)//si no encuentra salto de linea
-	{
-		str = ft_calloc(sizeof(char), (BUFFER_SIZE + 1));
-		if (!str)
-			return (-1);
-		i = read(fd, str, BUFFER_SIZE);
-		if (i > 0)
-		{
-			joined_str = ft_join_str(saved, str);
-			return (joined_str)
-		}
-	}
+	if (i >= 0)
+		return (ft_cut_line(saved, i));
 	else
-		str = ft_cut_line(saved, i);
+	{
+		aux = ft_calloc(sizeof(char), BUFFER_SIZE + 1);
+		if (!aux)
+			return (NULL);
+		i = read(fd, aux, BUFFER_SIZE);
+		if (i == 0)//si no hay mas que leer devuelve lo que hay
+			return (saved);
+		aux2 = ft_join_str(saved, aux);
+		free(aux);
+		free(saved);
+		saved = aux2;//strcpy???
+		free(aux2);
+		ft_find_line(fd, saved);
+	}
 	return (NULL);
 }
 
@@ -96,11 +108,8 @@ char	*get_next_line(int fd)
 		lines[fd] = ft_calloc(sizeof(char), (BUFFER_SIZE + 1));
 		if (!lines[fd])
 			return (NULL);
-	while (!line)//????????/
-	{
-		line = ft_find_line(fd, lines[fd]);
-		if (line == -1)
-			return (NULL);
-	}
+	line = ft_find_line(fd, lines[fd]);
+	if (line == -1)
+		return (NULL);
 	return (line);
 }
