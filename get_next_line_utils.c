@@ -6,7 +6,7 @@
 /*   By: sersanch <sersanch@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/04 11:57:54 by sersanch          #+#    #+#             */
-/*   Updated: 2022/10/04 15:32:26 by sersanch         ###   ########.fr       */
+/*   Updated: 2022/10/05 09:55:03 by sersanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	ft_strlen(char *str)
 	i = 0;
 	while (str[i] != '\0')
 	{
-		printf("str[%d] = >%c<\n", i, str[i]);
+		//printf("strlen str[%d] = >%c<\n", i, str[i]);
 		i++;
 	}
 	return (i);

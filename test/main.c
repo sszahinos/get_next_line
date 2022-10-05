@@ -6,7 +6,7 @@
 /*   By: sersanch <sersanch@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 09:36:03 by sersanch          #+#    #+#             */
-/*   Updated: 2022/10/04 15:34:49 by sersanch         ###   ########.fr       */
+/*   Updated: 2022/10/05 10:21:55 by sersanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ int	main(void)
 	fd = open("./texts_folder/test.txt", O_RDONLY);
 	/*read(fd, str, 2);
 	printf("%s\n", str);*/
-	printf("main\t>%s<\n", get_next_line(fd));
+	printf("1----------- main\t>%s<\n", get_next_line(fd));
 	printf("next line\n");
-//	printf("main\t>%s<\n", get_next_line(fd));
+	printf("2----------- main\t>%s<\n", get_next_line(fd));
 	close(3);
 	return (0);
 }
