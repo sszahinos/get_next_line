@@ -6,7 +6,7 @@
 /*   By: sersanch <sersanch@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 16:17:26 by sersanch          #+#    #+#             */
-/*   Updated: 2022/10/05 13:28:26 by sersanch         ###   ########.fr       */
+/*   Updated: 2022/10/05 14:53:06 by sersanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ static char	*ft_cut_line(char *line, int index)//devuelve linea
 		i++;
 	}
 	//new_str[i] = '\0';
-	free(line);
+	//free(line);
 	line = new_str;
 	free(new_str);
-	printf("linea renovada >%p<\n", line);
+	printf("linea renovada >%s<\n", line);
 	return (found_line);
 }
 
@@ -83,25 +83,26 @@ static char	*ft_cut_line(char *line, int index)//devuelve linea
 	return (new_line);
 }*/
 
-static int	ft_strcpy(char *str1, char *str2)
+static int	ft_strcpy(char **dest, char **src)
 {
 	int		len;
 	char	*aux;
 	int		i;
-	printf("str1 >%s<", str1);
-	len = ft_strlen(str2);
+	printf("dest\t>%s<\n", *dest);
+	len = ft_strlen(*src);
 	aux = ft_calloc(sizeof(char), (len + 1));
 	if (!aux)
 		return (0);
-	//free(str1);
-	str1 = aux;
+	//free(dest);
+	*dest = aux;
 	//free(aux)??
 	i = 0;
-	while (str2[i])
+	while (src[i])
 	{
-		str1[i] = str2[i];
+		dest[i] = src[i];
 		i++;
 	}
+	printf("dest-2\t>%s<\n", *dest);
 	return (1);
 }
 
@@ -127,12 +128,12 @@ static char	*ft_find_line(int fd, char **saved)
 		printf("i\t>%d<\n", i);
 		if (i <= 0)//si no hay mas que leer devuelve lo que hay
 			return (*saved);
-		printf("saved\t>%p<\n", *saved);
-		//printf("aux\t>%s<\n", aux);
-		//joined_str = ft_strjoin(*saved, aux);
-		ft_strcpy(*saved, joined_str);//strcpy???
+		printf("saved\t>%s<\n", *saved);
+		printf("aux\t>%s<\n", aux);
+		joined_str = ft_strjoin(*saved, aux);
+		ft_strcpy(&*saved, &joined_str);//strcpy???
 		//free(joined_str);
-		printf("saved2>%p<\n", *saved);
+		printf("saved2\t>%s<\n", *saved);
 		return (ft_find_line(fd, saved));
 	}
 	return (NULL);
