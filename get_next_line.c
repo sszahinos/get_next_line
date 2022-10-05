@@ -6,7 +6,7 @@
 /*   By: sersanch <sersanch@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 16:17:26 by sersanch          #+#    #+#             */
-/*   Updated: 2022/10/05 14:53:06 by sersanch         ###   ########.fr       */
+/*   Updated: 2022/10/05 16:41:20 by sersanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
  * ELIMINAR LINEAS SI ALGUN MALLOC FALLA (REVISAR CADA IF() RETURN NULL)
  * */
-static char	*ft_cut_line(char *line, int index)//devuelve linea
+static char	*ft_cut_line(char **line, int index)//devuelve linea
 {
 	char	*new_str;//resto
 	char	*found_line;
@@ -23,7 +23,7 @@ static char	*ft_cut_line(char *line, int index)//devuelve linea
 //caracter en index se incluye en new_str
 	printf("entra cut\n");
 	//printf("index >%d< len>%d<\n", index,  ft_strlen(line) - index + 1);
-	new_str = ft_calloc(sizeof(char), (ft_strlen(line) - index + 1));
+	new_str = ft_calloc(sizeof(char), (ft_strlen(*line) - index + 1));
 	found_line = ft_calloc(sizeof(char), (index + 1));
 	if (!new_str || !found_line)
 	{
@@ -31,28 +31,28 @@ static char	*ft_cut_line(char *line, int index)//devuelve linea
 		return (NULL);
 	}
 	i = 0;
-	//printf("index>%d<\n", index);
+	printf("index\t>%d<\n", index);
 	while (i < index)
 	{
-		found_line[i] = line[i];
-		//printf("char found line>%c<\n", found_line[i]);
+		found_line[i] = (*line)[i];
+		printf("char found line>%c<\n", found_line[i]);
 		i++;
 	}
-	//printf("palabra encontrada >%s<\n", found_line);
+	printf("palabra encontrada >%s<\n", found_line);
 	i = 0;
 	index++;
-	printf("lineIndexI >%s<>%c<\n", line, line[index + i]);
-	while (line[index + i])
+	printf("lineIndexI >%s<>%c<\n", *line, (*line)[index + i]);
+	while ((*line)[index + i])
 	{
-		new_str[i] = line[index + i];
-		printf("char new str>%c<\n", new_str[i]);
+		new_str[i] = (*line)[index + i];
+		printf("CHAR new str>%c<\n", new_str[i]);
 		i++;
 	}
 	//new_str[i] = '\0';
 	//free(line);
-	line = new_str;
-	free(new_str);
-	printf("linea renovada >%s<\n", line);
+	*line = new_str;
+	//free(new_str);
+	printf("linea renovada >%s<\n", *line);
 	return (found_line);
 }
 
@@ -116,8 +116,8 @@ static char	*ft_find_line(int fd, char **saved)
 	printf("entra findline i>%d<\n", i);
 	if (i >= 0)
 	{
-		printf("cut\n");
-		return (ft_cut_line(*saved, i));
+		printf("???????? cut\n");
+		return (ft_cut_line(&*saved, i));
 	}
 	else
 	{
@@ -125,12 +125,13 @@ static char	*ft_find_line(int fd, char **saved)
 		if (!aux)
 			return (NULL);
 		i = read(fd, aux, BUFFER_SIZE);
-		printf("i\t>%d<\n", i);
+		//printf("i\t>%d<\n", i);
 		if (i <= 0)//si no hay mas que leer devuelve lo que hay
 			return (*saved);
 		printf("saved\t>%s<\n", *saved);
 		printf("aux\t>%s<\n", aux);
 		joined_str = ft_strjoin(*saved, aux);
+		printf("joined\t>%s<\n", joined_str);
 		ft_strcpy(&*saved, &joined_str);//strcpy???
 		//free(joined_str);
 		printf("saved2\t>%s<\n", *saved);
@@ -147,7 +148,7 @@ char	*get_next_line(int fd)
 	//int		readen;
 
 	line = NULL;
-	printf(">>>> linesFD  >%p<\n", lines[fd]);
+	printf(">>>> linesFD  >%s<\n", lines[fd]);
 	if (fd < 0 || fd >= OPEN_MAX)
 		return (NULL);
 	if (!lines[fd])
