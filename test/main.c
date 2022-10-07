@@ -6,7 +6,7 @@
 /*   By: sersanch <sersanch@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 09:36:03 by sersanch          #+#    #+#             */
-/*   Updated: 2022/10/05 17:39:17 by sersanch         ###   ########.fr       */
+/*   Updated: 2022/10/07 18:38:35 by sersanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	main(void)
 	printf("next line\n");
 	printf("2----------- main\t>%s<\n", get_next_line(fd2));
 	printf("next line\n");
-	printf("1----------- main\t>%s<\n", get_next_line(fd));
+	printf("1----------- main\t>%p<\n", get_next_line(fd));
 
 	close(3);
 	return (0);
