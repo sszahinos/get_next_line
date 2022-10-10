@@ -6,7 +6,7 @@
 /*   By: sersanch <sersanch@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 09:36:03 by sersanch          #+#    #+#             */
-/*   Updated: 2022/10/10 15:18:52 by sersanch         ###   ########.fr       */
+/*   Updated: 2022/10/10 17:51:28 by sersanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,13 @@
 #include <unistd.h>
 #include <stdio.h>
 
-
-
 int	main(void)
 {
 	char *str;
 	int fd, fd2;
 
-//	fd = open("./texts_folder/test.txt", O_RDONLY);
-	fd = open("./texts_folder/41_no_nl", O_RDONLY);
+	fd = open("./texts_folder/test.txt", O_RDONLY);
+//	fd = open("./texts_folder/41_no_nl", O_RDONLY);
 
 //	fd2 = open("./texts_folder/lines_around_10.txt", O_RDONLY);
 	//read(fd, str, 2);

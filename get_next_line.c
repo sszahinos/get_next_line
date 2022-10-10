@@ -6,7 +6,7 @@
 /*   By: sersanch <sersanch@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 16:17:26 by sersanch          #+#    #+#             */
-/*   Updated: 2022/10/10 15:25:54 by sersanch         ###   ########.fr       */
+/*   Updated: 2022/10/10 18:09:06 by sersanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 /*
  * ELIMINAR LINEAS SI ALGUN MALLOC FALLA (REVISAR CADA IF() RETURN NULL)
  * */
-static char	*ft_cut_line(char **line, int index)//devuelve linea
+static char	*ft_cut_line(char **line, int index, int end)//devuelve linea
 {
 	char	*new_str;//resto
 	char	*found_line;
 	int		i;
 //caracter en index se incluye en new_str
 	new_str = ft_calloc(sizeof(char), (ft_strlen(*line) - index + 1));
-	found_line = ft_calloc(sizeof(char), (index + 1));
+	found_line = ft_calloc(sizeof(char), (index + 2));
 	if (!new_str || !found_line)
 	{
 		return (NULL);
@@ -31,8 +31,13 @@ static char	*ft_cut_line(char **line, int index)//devuelve linea
 	while (i < index)
 	{
 		found_line[i] = (*line)[i];
+		//printf("found line >%c<\n", found_line[i]);
 		i++;
 	}
+	if (end == 1)
+		found_line[i] = '\0';
+	else
+		found_line[i] = '\n';
 	i = 0;
 	index++;
 	while ((*line)[index + i])
@@ -80,6 +85,45 @@ static int	ft_strcpy(char **dest, char **src)
 
 static char	*ft_find_line(int fd, char **saved)
 {
+	int	found;
+	char	*joined_str;
+	char	*aux;
+
+	found = 0;
+	while (found == 0)
+	{
+		found = ft_find_nl(*saved);
+	//	printf("found >%d<\n", found);
+		if (found < 0) //no hay salto de linea
+		{
+		//	printf("------------- \n");
+			aux = ft_calloc(sizeof(char), BUFFER_SIZE + 1);
+			if (!aux)
+			{
+				return (NULL);
+			}
+			found = read(fd, aux, BUFFER_SIZE);
+			if (found == 0)
+			{
+				free(aux);
+				//printf("FINAL >%s<\n", *saved);
+				return (NULL);//Finaliza str sin encontrar salto de linea
+			}
+			joined_str = ft_strjoin(*saved, aux);
+			ft_strcpy(&*saved, &joined_str);
+			found = 0;
+		}
+		else //hay salto de linea
+		{
+		//	printf("ELSE >%s<\n", *saved);
+			return (ft_cut_line(saved, found, 1));
+		}
+	}
+	return (NULL);
+}
+/*
+static char	*ft_find_line(int fd, char **saved)
+{
 	char	*aux;
 	char	*joined_str;
 	int		i;
@@ -112,11 +156,13 @@ static char	*ft_find_line(int fd, char **saved)
 		//free(saved);
 	//	printf("tamanyo >%d<\n", ft_strlen(*saved));
 	//	printf("hay mas saved >%s<\n", *saved);
-		return (ft_find_line(fd, saved));
+		char *borrar = ft_find_line(fd, saved);
+		//printf("---- >%s<\n", borrar);
+		return (borrar);
 	}
 	return (NULL);
 }
-
+*/
 char	*get_next_line(int fd)
 {
 	//static char	**lines;
@@ -136,6 +182,7 @@ char	*get_next_line(int fd)
 	}*/
 	line = NULL;
 	if (!lines[fd])
+	{
 		lines[fd] = ft_calloc(sizeof(char), (BUFFER_SIZE + 1));
 		if (!lines[fd])
 		{
@@ -143,6 +190,8 @@ char	*get_next_line(int fd)
 			//	free(lines);
 			return (NULL);
 		}
+	}
+	printf("guardado >%s<\n", lines[fd]);
 	line = ft_find_line(fd, &lines[fd]);
 	if (!line || line[0] == '\0') 
 	{
