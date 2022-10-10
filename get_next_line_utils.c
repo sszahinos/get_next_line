@@ -6,7 +6,7 @@
 /*   By: sersanch <sersanch@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/04 11:57:54 by sersanch          #+#    #+#             */
-/*   Updated: 2022/10/05 16:42:27 by sersanch         ###   ########.fr       */
+/*   Updated: 2022/10/10 15:06:39 by sersanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,20 @@ void	*ft_calloc(int size, int count)
 {
 	char	*mem;
 	int		i;
-
+//printf("calloc >%i<\n", size * count);
 	mem = malloc(size * count);
 	if (!mem)
 		return (0);
 	i = 0;
+/*	while (i < (size * count))
+		mem[i++] = 'A';
+	mem[--i] = '\0';*/
+//	printf("calloc string >%s<\n", mem);
 	while (i < (size * count))
-		mem[i++] = '\0';
+	{
+		mem[i] = '\0';
+		i++;
+	}
 	return ((void *)mem);
 }
 

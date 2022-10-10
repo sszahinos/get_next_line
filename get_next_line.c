@@ -6,7 +6,7 @@
 /*   By: sersanch <sersanch@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 16:17:26 by sersanch          #+#    #+#             */
-/*   Updated: 2022/10/05 17:46:09 by sersanch         ###   ########.fr       */
+/*   Updated: 2022/10/10 15:25:54 by sersanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,18 @@ static char	*ft_cut_line(char **line, int index)//devuelve linea
 		i++;
 	}
 	//new_str[i] = '\0';
-	//free(line);
+	if (*line)
+	{
+		//printf("LINE \n");
+		free(*line);
+		*line = NULL;
+	}
 	*line = new_str;
-	//free(new_str);
+	/*if (new_str)
+	{
+		printf("ENTRA >%s<\n", new_str);
+		//free(new_str);
+	}*/
 	return (found_line);
 }
 
@@ -58,13 +67,14 @@ static int	ft_strcpy(char **dest, char **src)
 		return (0);
 	//free(dest);
 	*dest = aux;
-	//free(aux)??
+	free(aux);
 	i = 0;
 	while (src[i])
 	{
 		dest[i] = src[i];
 		i++;
 	}
+	//free(*src);
 	return (1);
 }
 
@@ -73,7 +83,8 @@ static char	*ft_find_line(int fd, char **saved)
 	char	*aux;
 	char	*joined_str;
 	int		i;
-	
+	//printf("tamanyo >%d<\n", ft_strlen(*saved));
+	//printf("pre saved >%p<\n", *saved);
 	i = ft_find_nl(*saved);
 	if (i >= 0)
 	{
@@ -83,16 +94,24 @@ static char	*ft_find_line(int fd, char **saved)
 	{
 		aux = ft_calloc(sizeof(char), BUFFER_SIZE + 1);
 		if (!aux)
+		{
 			return (NULL);
+		}
 		i = read(fd, aux, BUFFER_SIZE);
 		if (i <= 0)//si no hay mas que leer devuelve lo que hay
+		{
+	//		printf("tamanyo >%d<\n", ft_strlen(*saved));
+	//		printf("no hay mas saved >%s<\n", *saved);
 			return (*saved);
+		}
 		joined_str = ft_strjoin(*saved, aux);
 		//free(aux);
 		ft_strcpy(&*saved, &joined_str);
 	//	if (joined_str)
 	//		free(joined_str);
 		//free(saved);
+	//	printf("tamanyo >%d<\n", ft_strlen(*saved));
+	//	printf("hay mas saved >%s<\n", *saved);
 		return (ft_find_line(fd, saved));
 	}
 	return (NULL);
@@ -100,16 +119,37 @@ static char	*ft_find_line(int fd, char **saved)
 
 char	*get_next_line(int fd)
 {
-	static char	*lines[OPEN_MAX];
+	//static char	**lines;
+	static char	*lines[OPEN_MAX + 1] = {0};
 	char	*line;
-
-	line = NULL;
-	if (fd < 0 || fd >= OPEN_MAX)
+	if (fd < 0)
 		return (NULL);
+	/*if (!lines)
+	{
+		lines = malloc((OPEN_MAX * sizeof(char *)) + 1);
+		if (!lines)
+		{
+			printf("SALE\n");
+			return (NULL);
+		}
+		lines[OPEN_MAX] = NULL;
+	}*/
+	line = NULL;
 	if (!lines[fd])
 		lines[fd] = ft_calloc(sizeof(char), (BUFFER_SIZE + 1));
 		if (!lines[fd])
+		{
+			//if (lines)
+			//	free(lines);
 			return (NULL);
+		}
 	line = ft_find_line(fd, &lines[fd]);
+	if (!line || line[0] == '\0') 
+	{
+		free(line);
+		line = NULL;
+		//printf("LLEGA >%s<\n", lines[fd]);
+	}
+	//printf("tamano final>%d<\n", ft_strlen(line));
 	return (line);
 }
