@@ -6,7 +6,7 @@
 /*   By: sersanch <sersanch@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 09:36:03 by sersanch          #+#    #+#             */
-/*   Updated: 2022/10/13 10:17:09 by sersanch         ###   ########.fr       */
+/*   Updated: 2022/10/13 15:30:55 by sersanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main(void)
 //	fd2 = open("./texts_folder/lines_around_10.txt", O_RDONLY);
 	//read(fd, str, 2);
 	//printf("%s\n", str);
-	
+	//fd = -1;	
 	str = get_next_line(fd);
 	printf("1.1----------- main\t>%s<\n", str);
 	free(str);
@@ -56,8 +56,8 @@ int	main(void)
 	printf("END");
 	close(fd);
 //	check_leaks();
-	printf("%d\n", getpid());
-	/*while (1)
+/*	printf("%d\n", getpid());
+	while (1)
 		usleep(10);*/
 	return (0);
 }
