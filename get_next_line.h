@@ -6,7 +6,7 @@
 /*   By: sersanch <sersanch@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 10:01:27 by sersanch          #+#    #+#             */
-/*   Updated: 2022/10/10 17:28:17 by sersanch         ###   ########.fr       */
+/*   Updated: 2022/10/13 09:43:05 by sersanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-#	define BUFFER_SIZE 1
+#	define BUFFER_SIZE 10
 # endif
 
 

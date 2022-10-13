@@ -6,7 +6,7 @@
 /*   By: sersanch <sersanch@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/04 11:57:54 by sersanch          #+#    #+#             */
-/*   Updated: 2022/10/10 17:28:10 by sersanch         ###   ########.fr       */
+/*   Updated: 2022/10/13 10:59:24 by sersanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,17 @@ int	ft_strlen(char *str)
 int	ft_find_nl(char *str)
 {
 	int	i;
-
+	printf("find_nl >%s<\n", str);
 	if (!str)
 		return (-2);
 	i = 0;
 	while (str[i])
 	{
 		if (str[i] == '\n')
+		{
+			printf("nl\n");
 			return (i);
+		}
 		i++;
 	}
 	return (-1);

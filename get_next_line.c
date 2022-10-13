@@ -6,7 +6,7 @@
 /*   By: sersanch <sersanch@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 16:17:26 by sersanch          #+#    #+#             */
-/*   Updated: 2022/10/10 18:09:06 by sersanch         ###   ########.fr       */
+/*   Updated: 2022/10/13 12:52:10 by sersanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static char	*ft_cut_line(char **line, int index, int end)//devuelve linea
 	char	*new_str;//resto
 	char	*found_line;
 	int		i;
+	printf("cutline string>%s< index>%d< end>%d<\n", *line, index, end);
 //caracter en index se incluye en new_str
 	new_str = ft_calloc(sizeof(char), (ft_strlen(*line) - index + 1));
 	found_line = ft_calloc(sizeof(char), (index + 2));
@@ -28,16 +29,18 @@ static char	*ft_cut_line(char **line, int index, int end)//devuelve linea
 		return (NULL);
 	}
 	i = 0;
-	while (i < index)
+	while (i <= index)
 	{
 		found_line[i] = (*line)[i];
 		//printf("found line >%c<\n", found_line[i]);
 		i++;
 	}
+//	found_line[i] = (*line)[i];//POR QUE PONE SALTO DE LINEA AL FINAL??
 	if (end == 1)
-		found_line[i] = '\0';
-	else
-		found_line[i] = '\n';
+	{
+		printf("ENTRA\n");
+		found_line[--i] = '\0';
+	}
 	i = 0;
 	index++;
 	while ((*line)[index + i])
@@ -55,7 +58,7 @@ static char	*ft_cut_line(char **line, int index, int end)//devuelve linea
 	*line = new_str;
 	/*if (new_str)
 	{
-		printf("ENTRA >%s<\n", new_str);
+	//	printf("ENTRA >%s<\n", new_str);
 		//free(new_str);
 	}*/
 	return (found_line);
@@ -82,7 +85,7 @@ static int	ft_strcpy(char **dest, char **src)
 	//free(*src);
 	return (1);
 }
-
+/*
 static char	*ft_find_line(int fd, char **saved)
 {
 	int	found;
@@ -121,18 +124,20 @@ static char	*ft_find_line(int fd, char **saved)
 	}
 	return (NULL);
 }
-/*
+*/
 static char	*ft_find_line(int fd, char **saved)
 {
 	char	*aux;
 	char	*joined_str;
 	int		i;
 	//printf("tamanyo >%d<\n", ft_strlen(*saved));
-	//printf("pre saved >%p<\n", *saved);
+//	printf("pre saved >%s<\n", *saved);
+
 	i = ft_find_nl(*saved);
+	printf("FIND LINE >%d<\n", i);
 	if (i >= 0)
 	{
-		return (ft_cut_line(&*saved, i));
+		return (ft_cut_line(&*saved, i, 0));
 	}
 	else
 	{
@@ -142,11 +147,13 @@ static char	*ft_find_line(int fd, char **saved)
 			return (NULL);
 		}
 		i = read(fd, aux, BUFFER_SIZE);
+		printf("aux , I >%s< >%d<\n", aux, i);
 		if (i <= 0)//si no hay mas que leer devuelve lo que hay
 		{
 	//		printf("tamanyo >%d<\n", ft_strlen(*saved));
-	//		printf("no hay mas saved >%s<\n", *saved);
-			return (*saved);
+			printf("no hay mas saved >%s<\n", *saved);
+			//return (*saved);
+			return (ft_cut_line(saved, i, 1));
 		}
 		joined_str = ft_strjoin(*saved, aux);
 		//free(aux);
@@ -162,7 +169,7 @@ static char	*ft_find_line(int fd, char **saved)
 	}
 	return (NULL);
 }
-*/
+
 char	*get_next_line(int fd)
 {
 	//static char	**lines;
@@ -200,5 +207,8 @@ char	*get_next_line(int fd)
 		//printf("LLEGA >%s<\n", lines[fd]);
 	}
 	//printf("tamano final>%d<\n", ft_strlen(line));
+/*	printf("%d\n", getpid());
+	while (1)
+		usleep(10);*/
 	return (line);
 }
